@@ -9,6 +9,9 @@ namespace KingOfMountain
         [SerializeField] protected JumpingConfig config;
         protected AnimationController _animationController;
 
+        protected const string _straightAnimationJumpName = "StraightJump";
+        protected const string _sideJumpAnimationName = "SideJump";
+
         protected Vector3 nextPosition;
         protected float jumpSpeed;
 
@@ -22,21 +25,21 @@ namespace KingOfMountain
         {
             nextPosition += config.StraightJumpOffset;
             jumpSpeed = config.StraightJumpSpeed;
-            _animationController.ChangeState("StraightJump");
+            _animationController.ChangeState(_straightAnimationJumpName);
         }
 
         public void JumpLeft()
         {
             nextPosition += config.LeftJumpOffset;
             jumpSpeed = config.SideJumpSpeed;
-            _animationController.ChangeState("SideJump");
+            _animationController.ChangeState(_sideJumpAnimationName);
         }
 
         public void JumpRight()
         {
             nextPosition += config.RightJumpOffset;
             jumpSpeed = config.SideJumpSpeed;
-            _animationController.ChangeState("SideJump");
+            _animationController.ChangeState(_sideJumpAnimationName);
         }
 
         protected void MovePosition()
