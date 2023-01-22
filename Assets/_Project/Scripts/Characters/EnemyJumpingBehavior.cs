@@ -16,7 +16,7 @@ namespace KingOfMountain
 
         private void Update()
         {
-            MovePosition();
+            UpdatePosition();
 
             LookAtJumpDirection(); 
         }

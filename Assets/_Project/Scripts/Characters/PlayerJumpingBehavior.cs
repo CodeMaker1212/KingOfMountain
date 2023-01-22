@@ -40,8 +40,7 @@ namespace KingOfMountain
 
         private void FixedUpdate()
         {
-            transform.position =
-                Vector3.MoveTowards(transform.position, nextPosition, jumpSpeed * Time.deltaTime);
+            UpdatePosition();
         }    
     }
 }

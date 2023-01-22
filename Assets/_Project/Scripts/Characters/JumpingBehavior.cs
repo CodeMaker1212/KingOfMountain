@@ -42,7 +42,7 @@ namespace KingOfMountain
             _animationController.ChangeState(_sideJumpAnimationName);
         }
 
-        protected void MovePosition()
+        protected void UpdatePosition()
         {
             transform.position =
                 Vector3.MoveTowards(transform.position, nextPosition, jumpSpeed * Time.deltaTime);
