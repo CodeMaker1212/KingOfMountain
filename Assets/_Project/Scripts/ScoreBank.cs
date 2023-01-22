@@ -6,7 +6,7 @@ namespace KingOfMountain
 {
     public class ScoreBank : MonoBehaviour
     {
-        private HUD _hud;
+        private IScoreDisplay _scoreDisplay;
         private GameEventsProvider _eventsProvider;
         private ISavableDataService _dataService;
         private SavableData _savableData;
@@ -21,15 +21,17 @@ namespace KingOfMountain
             {
                 _currentScore = Mathf.Clamp(value, 0, int.MaxValue);
 
-                if(_currentScore > _savableData.BestScore)
-                   _savableData.BestScore = _currentScore;
+                if (_currentScore > _savableData.BestScore)
+                    _savableData.BestScore = _currentScore;
             }
         }
 
+        public Score ScoreValues => new Score (CurrentScore, BestScore);
+
         [Inject] 
-        private void Construct(HUD hud, GameEventsProvider eventsProvider, ISavableDataService dataService)
+        private void Construct(IScoreDisplay scoreDiplay, GameEventsProvider eventsProvider, ISavableDataService dataService)
         {
-            _hud = hud;
+            _scoreDisplay = scoreDiplay;
             _eventsProvider = eventsProvider;
 
             _eventsProvider.OnEventPublished += (gameEvent) =>
@@ -58,11 +60,11 @@ namespace KingOfMountain
             SaveData();
         }
 
-        private void AddScore()
+        public void AddScore()
         {
             CurrentScore++;
 
-            _hud.DisplayCurrentScore(CurrentScore);
+            _scoreDisplay.DisplayScore(ScoreValues);
         }
 
         public void SaveData() => _dataService.Save("BestScore", _savableData);

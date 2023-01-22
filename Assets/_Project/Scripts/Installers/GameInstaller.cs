@@ -126,8 +126,9 @@ public class GameInstaller : MonoInstaller
 
     private void InstallUI()
     {
-        Container.BindInstance(_gameOverScreen).AsSingle();
-        Container.BindInstance(_hud).AsSingle();
+        Container.Bind<IScoreDisplay>().FromInstance(_hud).WhenInjectedInto<ScoreBank>();
+        Container.Bind<IScoreDisplay>().FromInstance(_gameOverScreen).WhenInjectedInto<GameOverHandler>();
+        Container.BindInstance(_gameOverScreen).AsTransient();
         Container.BindInstance(_startButton).WhenInjectedInto<StartScreen>();
         Container.BindInstance(_restartButton).WhenInjectedInto<GameOverScreen>();
         Container.Bind<Text>().WithId("ScoreResultText").FromInstance(_scoreResult).WhenInjectedInto<GameOverScreen>();

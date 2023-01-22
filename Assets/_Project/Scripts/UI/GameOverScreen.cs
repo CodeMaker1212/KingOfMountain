@@ -5,7 +5,7 @@ using Zenject;
 
 namespace KingOfMountain
 {
-    public class GameOverScreen : MonoBehaviour
+    public class GameOverScreen : MonoBehaviour, IScoreDisplay
     {
         [Inject(Id = "ScoreResultText")] private Text _scoreResult;
         [Inject(Id = "BestScoreText")] private Text _bestScore;
@@ -24,7 +24,7 @@ namespace KingOfMountain
         {
             _restartButton.onClick.AddListener(HandleRestartButtonClick);
 
-            DisplayScore();
+            DisplayScore(_scoreBank.ScoreValues);
         }
 
         private void HandleRestartButtonClick()
@@ -32,10 +32,10 @@ namespace KingOfMountain
             SceneManager.LoadScene(0);
         }
 
-        private void DisplayScore()
+        public void DisplayScore(Score score)
         {
-            _scoreResult.text = $"Score: {_scoreBank.CurrentScore}";
-            _bestScore.text = $"Best: {_scoreBank.BestScore}";
+            _scoreResult.text = $"Score: {score.CurrentValue}";
+            _bestScore.text = $"Best: {score.BestValue}";
         }
     }
 }

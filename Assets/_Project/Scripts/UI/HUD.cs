@@ -4,7 +4,7 @@ using Zenject;
 
 namespace KingOfMountain
 {
-    public class HUD : MonoBehaviour
+    public class HUD : MonoBehaviour, IScoreDisplay
     {       
         private Text _score;
 
@@ -18,14 +18,22 @@ namespace KingOfMountain
                 switch (_)
                 {
                     case GameEvent.OnPlayerFall:
-                    case GameEvent.OnPlayerExploded: ClearPointDisplay();
+                    case GameEvent.OnPlayerExploded: ClearScoreDisplay();
                     break;
                 }            
             };
+        }      
+
+        public void DisplayScore<T>(T value) where T : struct
+        {
+            
         }
 
-        public void DisplayCurrentScore(int value) => _score.text = value.ToString();
+        private void ClearScoreDisplay() => _score.text = string.Empty;
 
-        private void ClearPointDisplay() => _score.text = string.Empty;
+        public void DisplayScore(Score score)
+        {
+            _score.text = score.CurrentValue.ToString();
+        }
     }
 }
