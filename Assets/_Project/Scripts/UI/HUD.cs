@@ -14,14 +14,15 @@ namespace KingOfMountain
         {
             _score = score;
 
-            GameEventsBus.Subscribe(GameEvent.OnPlayerDie, ClearScoreDisplay);       
+            GameEventsBus.Subscribe(GameEvent.OnPlayerDie, Disable);       
         }      
-
-        private void ClearScoreDisplay() => _score.text = string.Empty;
-
+    
         public void DisplayScore(Score score)
         {
             _score.text = score.CurrentValue.ToString();
-        }                    
+        }
+
+        private void Disable() => gameObject.SetActive(false);
+
     }
 }
