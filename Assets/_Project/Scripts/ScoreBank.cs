@@ -1,13 +1,13 @@
 using UnityEngine;
 using System;
 using Zenject;
+using KingOfMountain.Events;
 
 namespace KingOfMountain
 {
     public class ScoreBank : MonoBehaviour
     {
         private IScoreDisplay _scoreDisplay;
-        private GameEventsProvider _eventsProvider;
         private ISavableDataService _dataService;
         private SavableData _savableData;
         private int _currentScore;
@@ -29,35 +29,17 @@ namespace KingOfMountain
         public Score ScoreValues => new Score (CurrentScore, BestScore);
 
         [Inject] 
-        private void Construct(IScoreDisplay scoreDiplay, GameEventsProvider eventsProvider, ISavableDataService dataService)
+        private void Construct(IScoreDisplay scoreDiplay, ISavableDataService dataService)
         {
-            _scoreDisplay = scoreDiplay;
-            _eventsProvider = eventsProvider;
-
-            _eventsProvider.OnEventPublished += (gameEvent) =>
-            {
-                switch (gameEvent)
-                {
-                    case GameEvent.OnPlayerOvercameStep: AddScore(); break;
-                    case GameEvent.OnPlayerFall:
-                    case GameEvent.OnPlayerExploded: SaveData(); break;
-                }
-            };
+            _scoreDisplay = scoreDiplay;         
 
             _dataService = dataService;
 
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOvercameStep, AddScore);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerFall, SaveData);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, SaveData);
+
             RestoreData();
-        }
-
-        private void RestoreData()
-        {
-            _savableData = _dataService.Load<SavableData>("BestScore");
-            _savableData ??= new SavableData();
-        }
-
-        private void OnApplicationQuit()
-        {
-            SaveData();
         }
 
         public void AddScore()
@@ -67,9 +49,18 @@ namespace KingOfMountain
             _scoreDisplay.DisplayScore(ScoreValues);
         }
 
-        public void SaveData() => _dataService.Save("BestScore", _savableData);
-      
-   
+        public void SaveData() => 
+            _dataService.Save("BestScore", _savableData);
+
+        private void RestoreData()
+        {
+            _savableData = _dataService.Load<SavableData>("BestScore");
+            _savableData ??= new SavableData();
+        }           
+
+        private void OnApplicationQuit() => SaveData();
+
+
         [Serializable]
         private class SavableData
         {

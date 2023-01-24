@@ -1,3 +1,4 @@
+using KingOfMountain.Events;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -9,31 +10,18 @@ namespace KingOfMountain
         private Text _score;
 
         [Inject]
-        private void Construct(Text score, GameEventsProvider eventsProvider)
+        private void Construct(Text score)
         {
             _score = score;
 
-            eventsProvider.OnEventPublished += (_) =>
-            {
-                switch (_)
-                {
-                    case GameEvent.OnPlayerFall:
-                    case GameEvent.OnPlayerExploded: ClearScoreDisplay();
-                    break;
-                }            
-            };
+            GameEventsBus.Subscribe(GameEvent.OnPlayerFall, ClearScoreDisplay);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, ClearScoreDisplay);       
         }      
-
-        public void DisplayScore<T>(T value) where T : struct
-        {
-            
-        }
 
         private void ClearScoreDisplay() => _score.text = string.Empty;
 
-        public void DisplayScore(Score score)
-        {
+        public void DisplayScore(Score score) =>     
             _score.text = score.CurrentValue.ToString();
-        }
+        
     }
 }

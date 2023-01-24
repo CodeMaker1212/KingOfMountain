@@ -1,3 +1,4 @@
+using KingOfMountain.Events;
 using UnityEngine;
 using Zenject;
 
@@ -7,30 +8,22 @@ namespace KingOfMountain
     {
         private AnimationController _animationController;       
         private ParticleSystem _explosionEffect;
-        private GameEventsProvider _eventsProvider;
 
         [Inject]
-        private void Construct(Animator animator, ParticleSystem explisionEffect, GameEventsProvider eventsProvider)
+        private void Construct(Animator animator, ParticleSystem explisionEffect)
         {
             _animationController = new AnimationController(animator);
             _explosionEffect = explisionEffect;
-            _eventsProvider = eventsProvider;
 
-            _eventsProvider.OnEventPublished += (_) =>
-            {
-                switch (_)
-                {
-                    case GameEvent.OnPlayerOutsideLadder: Fall(); break;
-                    case GameEvent.OnPlayerCollidedEnemy: Explode(); break;
-                }
-            };
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOutsideLadder, Fall);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerCollidedEnemy, Explode);
         }
         
         private void Fall()
         {
             _animationController.ChangeState("Falling");
 
-            _eventsProvider.PublishEvent(GameEvent.OnPlayerFall);
+            GameEventsBus.Publish(GameEvent.OnPlayerFall);
         }
 
         private void Explode()
@@ -40,7 +33,7 @@ namespace KingOfMountain
 
             gameObject.SetActive(false);
 
-            _eventsProvider.PublishEvent(GameEvent.OnPlayerExploded);
+            GameEventsBus.Publish(GameEvent.OnPlayerExploded);
         }
     }
 }

@@ -1,3 +1,4 @@
+using KingOfMountain.Events;
 using UnityEngine;
 using Zenject;
 
@@ -5,23 +6,15 @@ namespace KingOfMountain
 {
     public class PlayerJumpingBehavior : JumpingBehavior
     {
-        private GameEventsProvider _eventsProvider;
         private ScreenTouchDetector _screenTouchDetector;
 
         [Inject]
-        private void Construct(ScreenTouchDetector touchDetector, GameEventsProvider eventsProvider)
+        private void Construct(ScreenTouchDetector touchDetector)
         {
             _screenTouchDetector = touchDetector;
-            _eventsProvider = eventsProvider;
 
-            _eventsProvider.OnEventPublished += (_) =>
-            {
-                switch (_)
-                {
-                    case GameEvent.OnPlayerFall:
-                    case GameEvent.OnPlayerExploded: enabled = false; break;
-                }
-            };      
+            GameEventsBus.Subscribe(GameEvent.OnPlayerFall, Disable);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, Disable);
         }
 
         private void OnEnable()
@@ -41,6 +34,8 @@ namespace KingOfMountain
         private void FixedUpdate()
         {
             UpdatePosition();
-        }    
+        }  
+        
+        private void Disable() => enabled= false;
     }
 }

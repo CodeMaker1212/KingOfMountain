@@ -1,4 +1,5 @@
 using Zenject;
+using KingOfMountain.Events;
 
 namespace KingOfMountain.DependencyBoot
 {
@@ -6,8 +7,9 @@ namespace KingOfMountain.DependencyBoot
     {
         public override void InstallBindings()
         {
-            Container.Bind<GameEventsProvider>()
-                     .AsSingle();
+            Container.Bind<GameEventsBus>()
+                     .AsSingle()
+                     .NonLazy();
         }
     }
 }

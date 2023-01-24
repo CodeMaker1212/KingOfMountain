@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Zenject;
+using KingOfMountain.Events;
 
 namespace KingOfMountain
 {
@@ -8,33 +9,23 @@ namespace KingOfMountain
     {
         private SimplePrefabFactory _prefabFactory;
         private Transform[] _spawnPoints;
-        private EnemySpawnerConfig _config;
-        private GameEventsProvider _eventsProvider;     
+        private EnemySpawnerConfig _config;  
         private Coroutine _spawnCoroutine;
         private Vector3 _shiftPoint = new Vector3(0, 1, 1);
         private float _currentSpawnTimeInterval;
 
         [Inject]
-        private void Construct(SimplePrefabFactory prefabFactory, Transform[] spawnPoints,
-                               EnemySpawnerConfig config, GameEventsProvider eventsProvider)
+        private void Construct(SimplePrefabFactory prefabFactory,
+                               Transform[] spawnPoints,
+                               EnemySpawnerConfig config)
         {
             _prefabFactory = prefabFactory;
             _spawnPoints = spawnPoints;
             _config = config;
-            _eventsProvider = eventsProvider;
 
-            _eventsProvider.OnEventPublished += (gameEvent) =>
-            {
-                if (gameEvent == GameEvent.OnPlayerOvercameStep)
-                {
-                    if (_spawnCoroutine == null)
-                        StartSpawn();
-
-                    ShiftPosition();
-
-                    CalculateNewSpawnInterval();
-                }
-            };
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOvercameStep, StartSpawn);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOvercameStep, ShiftPosition);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOvercameStep, CalculateNewSpawnInterval);
         }
 
         private void Start()
@@ -50,6 +41,8 @@ namespace KingOfMountain
 
         private void StartSpawn()
         {
+            if (_spawnCoroutine != null) return;
+
             _spawnCoroutine = StartCoroutine(SpawnEnemies());
         }
 

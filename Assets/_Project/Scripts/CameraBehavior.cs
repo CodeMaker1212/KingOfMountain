@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zenject;
+using KingOfMountain.Events;
 
 namespace KingOfMountain
 {
@@ -9,31 +10,22 @@ namespace KingOfMountain
         private Transform _playerTransform;
 
         private ShakingEffect _shakingEffect;
-        private GameEventsProvider _eventsProvider;
         private float _speed = 7;
         private Vector3 _offset = new Vector3(0, 5.83f, -3.44f);
 
         [Inject]
-        private void Construct(ShakingEffect shakingEffect, GameEventsProvider eventsProvider)
+        private void Construct(ShakingEffect shakingEffect)
         {
             _shakingEffect = shakingEffect;
-            _eventsProvider = eventsProvider;
 
-            _eventsProvider.OnEventPublished += (_) =>
-            {
-                switch (_)
-                {
-                    case GameEvent.OnPlayerOutsideLadder:
-                        enabled = false;
-                        break;
-
-                    case GameEvent.OnPlayerExploded:
-                        enabled = false;
-                        _shakingEffect.Play();
-                        break;
-                }           
-            };
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOutsideLadder, Disable);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, Disable);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, PlayShakingEffect);        
         }
+
+        private void Disable() => enabled = false;
+
+        private void PlayShakingEffect() => _shakingEffect.Play();
 
         private void LateUpdate()
         {

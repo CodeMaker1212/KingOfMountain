@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zenject;
+using KingOfMountain.Events;
 
 namespace KingOfMountain
 {
@@ -7,19 +8,13 @@ namespace KingOfMountain
     {
         private Vector3 _stepBlockOffset = new Vector3(0, 5, 5);
         private GameObject _stepsBlock;
-        private GameEventsProvider _eventsProvider;
 
         [Inject]
-        private void Construct(GameObject stepsBlock , GameEventsProvider eventsProvider) 
+        private void Construct(GameObject stepsBlock) 
         {
             _stepsBlock = stepsBlock;
-            _eventsProvider = eventsProvider;
 
-            _eventsProvider.OnEventPublished += (gameEvent) =>
-            {
-                if (gameEvent == GameEvent.LadderUpdateTriggered)
-                    UpdateStepsBlock();
-            };
+            GameEventsBus.Subscribe(GameEvent.LadderUpdateTriggered, UpdateStepsBlock);
         }
 
         private void UpdateStepsBlock()
@@ -27,7 +22,7 @@ namespace KingOfMountain
             _stepsBlock.transform.localPosition =
                 _stepsBlock.transform.localPosition + _stepBlockOffset;
 
-            _eventsProvider.PublishEvent(GameEvent.OnLadderUpdated);
+            GameEventsBus.Publish(GameEvent.OnLadderUpdated);
         }
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zenject;
+using KingOfMountain.Events;
 
 namespace KingOfMountain
 {
@@ -8,13 +9,10 @@ namespace KingOfMountain
         [Inject(Id = "EnemyTag")]
         private string _enemyTag;
 
-        [Inject]
-        private GameEventsProvider _eventsProvider;
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(_enemyTag))
-                _eventsProvider.PublishEvent(GameEvent.OnPlayerCollidedEnemy);              
+                GameEventsBus.Publish(GameEvent.OnPlayerCollidedEnemy);
         }
     }
 }
