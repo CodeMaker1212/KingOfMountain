@@ -1,17 +1,24 @@
 using UnityEngine;
 using System.IO;
 
-namespace KingOfMountain
+namespace KingOfMountain.SaveLoad
 {
-    public class JsonDataService : ISavableDataService
+    public class JsonDataService : SavableDataService
     {
-        public void Save<T>(string id, T data)
+        private string _jsonText = string.Empty;
+
+        public JsonDataService() : base()
         {
-            string json = JsonUtility.ToJson(data);
-            File.WriteAllText(GetFullFilePath(id), json);
+            fileExtension = ".json";
         }
 
-        public T Load<T>(string id)
+        public override void Save<T>(string id, T data)
+        {
+            _jsonText = JsonUtility.ToJson(data);
+            File.WriteAllText(GetFullFilePath(id), _jsonText);
+        }
+
+        public override T Load<T>(string id)
         {
             var filePath = GetFullFilePath(id);
 
@@ -24,17 +31,6 @@ namespace KingOfMountain
             }
 
             return data;
-        }
-
-        public void Delete(string id)
-        {
-            var filePath = GetFullFilePath(id);
-
-            if (File.Exists(filePath))
-                File.Delete(filePath);
-        }
-
-        private string GetFullFilePath(string fileName) =>
-            $"{Application.persistentDataPath}/{fileName}.json";
+        }      
     }
 }

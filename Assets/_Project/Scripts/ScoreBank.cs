@@ -2,13 +2,14 @@ using UnityEngine;
 using System;
 using Zenject;
 using KingOfMountain.Events;
+using KingOfMountain.SaveLoad;
 
 namespace KingOfMountain
 {
     public class ScoreBank : MonoBehaviour
     {
         private IScoreDisplay _scoreDisplay;
-        private ISavableDataService _dataService;
+        private SavableDataService _dataService;
         private SavableData _savableData;
         private int _currentScore;
 
@@ -29,7 +30,7 @@ namespace KingOfMountain
         public Score ScoreValues => new Score (CurrentScore, BestScore);
 
         [Inject] 
-        private void Construct(IScoreDisplay scoreDiplay, ISavableDataService dataService)
+        private void Construct(IScoreDisplay scoreDiplay, SavableDataService dataService)
         {
             _scoreDisplay = scoreDiplay;         
 

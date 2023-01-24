@@ -1,4 +1,5 @@
 using Zenject;
+using KingOfMountain.SaveLoad;
 
 namespace KingOfMountain.DependencyBoot
 {
@@ -6,9 +7,17 @@ namespace KingOfMountain.DependencyBoot
     {
         public override void InstallBindings()
         {
-            Container.Bind<ISavableDataService>()
-                     .To<JsonDataService>()
-                     .AsSingle();
+
+#if UNITY_ANDROID
+
+            Container.Bind<SavableDataService>()
+                    .To<JsonDataService>()
+                    .AsSingle();
+#else
+           Container.Bind<SavableDataService>()
+                    .To<BinaryDataService>()
+                    .AsSingle();
+#endif
         }
     }
 }
