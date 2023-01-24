@@ -26,8 +26,8 @@ namespace KingOfMountain.SaveLoad
 
             if (File.Exists(filePath))
             {
-                string json = File.ReadAllText(filePath);
-                data = JsonUtility.FromJson<T>(json);
+                _jsonText = File.ReadAllText(filePath);
+                data = JsonUtility.FromJson<T>(_jsonText);
             }
 
             return data;
