@@ -34,7 +34,7 @@ namespace KingOfMountain
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         }
 
-        // Вызывается событием анимации.
+        // Called by AnimationEvent.
         private void DetermineNextJump()
         {
             int forwardDirection = 0;

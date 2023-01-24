@@ -2,9 +2,9 @@ using KingOfMountain.Events;
 using UnityEngine;
 using Zenject;
 
-namespace KingOfMountain
+namespace KingOfMountain.Characters
 {
-    public class Player : MonoBehaviour
+    public class Player : Character
     {
         private AnimationController _animationController;       
         private ParticleSystem _explosionEffect;
@@ -22,18 +22,22 @@ namespace KingOfMountain
         private void Fall()
         {
             _animationController.ChangeState("Falling");
-
-            GameEventsBus.Publish(GameEvent.OnPlayerFall);
         }
 
         private void Explode()
         {
             _explosionEffect.transform.SetParent(null);
-            _explosionEffect.Play();
+            _explosionEffect.Play(); 
+            
+            Die();
+        }
 
+        // Called by AnimationEvent.
+        protected override void Die()
+        {
             gameObject.SetActive(false);
 
-            GameEventsBus.Publish(GameEvent.OnPlayerExploded);
+            GameEventsBus.Publish(GameEvent.OnPlayerDie);
         }
     }
 }

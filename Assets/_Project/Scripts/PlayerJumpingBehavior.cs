@@ -1,5 +1,4 @@
 using KingOfMountain.Events;
-using UnityEngine;
 using Zenject;
 
 namespace KingOfMountain
@@ -13,8 +12,7 @@ namespace KingOfMountain
         {
             _screenTouchDetector = touchDetector;
 
-            GameEventsBus.Subscribe(GameEvent.OnPlayerFall, Disable);
-            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, Disable);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerOutsideLadder, Disable);
         }
 
         private void OnEnable()

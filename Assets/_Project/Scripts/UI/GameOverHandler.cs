@@ -15,14 +15,13 @@ namespace KingOfMountain
         {
             _gameOverScreen = gameOverScreen;        
 
-            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded,
-                 () => Invoke(nameof(EnableGameOverScreen), _startScreenEnablingDelay));
-
-            GameEventsBus.Subscribe(GameEvent.OnPlayerFall,
+            GameEventsBus.Subscribe(GameEvent.OnPlayerDie,
                  () => Invoke(nameof(EnableGameOverScreen), _startScreenEnablingDelay));
         }
 
-        private void EnableGameOverScreen() => 
+        private void EnableGameOverScreen()
+        {
             _gameOverScreen.gameObject.SetActive(true);
+        }          
     }    
 }

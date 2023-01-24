@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zenject;
+using KingOfMountain.Characters;
 
 namespace KingOfMountain.DependencyBoot
 {

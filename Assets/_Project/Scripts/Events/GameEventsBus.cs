@@ -41,8 +41,7 @@ namespace KingOfMountain.Events
         LadderUpdateTriggered,
         OnLadderUpdated, 
         OnPlayerOutsideLadder,
-        OnPlayerFall,
         OnPlayerCollidedEnemy,
-        OnPlayerExploded,
+        OnPlayerDie,
     }
 }

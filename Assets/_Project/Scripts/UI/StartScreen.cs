@@ -28,7 +28,7 @@ namespace KingOfMountain
             _animation.Play();
         }
 
-        // Вызывается событием анимации.
+        // Called by AnimationEvent.
         private void HandleDisableAnimationEnd() => gameObject.SetActive(false);
     }
 }

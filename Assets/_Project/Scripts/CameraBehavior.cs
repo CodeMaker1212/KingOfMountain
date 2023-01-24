@@ -19,8 +19,8 @@ namespace KingOfMountain
             _shakingEffect = shakingEffect;
 
             GameEventsBus.Subscribe(GameEvent.OnPlayerOutsideLadder, Disable);
-            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, Disable);
-            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, PlayShakingEffect);        
+            GameEventsBus.Subscribe(GameEvent.OnPlayerDie, Disable);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerDie, PlayShakingEffect);        
         }
 
         private void Disable() => enabled = false;

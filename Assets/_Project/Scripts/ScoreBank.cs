@@ -36,8 +36,7 @@ namespace KingOfMountain
             _dataService = dataService;
 
             GameEventsBus.Subscribe(GameEvent.OnPlayerOvercameStep, AddScore);
-            GameEventsBus.Subscribe(GameEvent.OnPlayerFall, SaveData);
-            GameEventsBus.Subscribe(GameEvent.OnPlayerExploded, SaveData);
+            GameEventsBus.Subscribe(GameEvent.OnPlayerDie, SaveData);
 
             RestoreData();
         }
@@ -49,9 +48,11 @@ namespace KingOfMountain
             _scoreDisplay.DisplayScore(ScoreValues);
         }
 
-        public void SaveData() => 
+        public void SaveData()
+        {
             _dataService.Save("BestScore", _savableData);
-
+        }
+           
         private void RestoreData()
         {
             _savableData = _dataService.Load<SavableData>("BestScore");

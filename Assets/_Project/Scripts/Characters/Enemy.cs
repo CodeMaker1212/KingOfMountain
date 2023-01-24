@@ -1,13 +1,17 @@
-using UnityEngine;
-
-namespace KingOfMountain
+namespace KingOfMountain.Characters
 {
-    public class Enemy : MonoBehaviour
+    public class Enemy : Character
     {
         private const float _lifeTimeInSeconds = 12.0f;
 
-        private void Start() => Invoke(nameof(DestroyInstance), _lifeTimeInSeconds);
+        private void Start()
+        {
+            Invoke(nameof(Die), _lifeTimeInSeconds);
+        }
 
-        private void DestroyInstance() => Destroy(gameObject);
+        protected override void Die()
+        {
+            Destroy(gameObject);
+        }
     }
 }
