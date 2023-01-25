@@ -11,6 +11,11 @@ namespace KingOfMountain.Characters
 
         protected override void Die()
         {
+            Deactivate();
+        }
+
+        public override void Deactivate()
+        {
             Destroy(gameObject);
         }
     }

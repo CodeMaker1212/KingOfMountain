@@ -35,9 +35,14 @@ namespace KingOfMountain.Characters
         // Called by AnimationEvent.
         protected override void Die()
         {
-            gameObject.SetActive(false);
+            Deactivate();
 
             GameEventsBus.Publish(GameEvent.OnPlayerDie);
+        }
+
+        public override void Deactivate()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

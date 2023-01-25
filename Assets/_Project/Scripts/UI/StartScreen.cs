@@ -4,7 +4,7 @@ using Zenject;
 
 namespace KingOfMountain
 {
-    public class StartScreen : MonoBehaviour
+    public class StartScreen : UIElement
     {
         private Button _startButton;
         private Animation _animation;
@@ -29,6 +29,6 @@ namespace KingOfMountain
         }
 
         // Called by AnimationEvent.
-        private void HandleDisableAnimationEnd() => gameObject.SetActive(false);
+        private void HandleDisableAnimationEnd() => Deactivate();
     }
 }

@@ -1,11 +1,10 @@
-using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace KingOfMountain
 {
-    public class GameOverScreen : MonoBehaviour, IScoreDisplay
+    public class GameOverScreen : UIElement, IScoreDisplay
     {
         [Inject(Id = "ScoreResultText")] private Text _scoreResult;
         [Inject(Id = "BestScoreText")] private Text _bestScore;

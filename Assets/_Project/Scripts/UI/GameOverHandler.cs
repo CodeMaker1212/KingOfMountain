@@ -21,7 +21,7 @@ namespace KingOfMountain
 
         private void EnableGameOverScreen()
         {
-            _gameOverScreen.gameObject.SetActive(true);
+            _gameOverScreen.Activate();
         }          
     }    
 }

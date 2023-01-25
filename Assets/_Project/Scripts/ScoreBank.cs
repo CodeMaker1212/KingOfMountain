@@ -51,12 +51,12 @@ namespace KingOfMountain
 
         public void SaveData()
         {
-            _dataService.Save("BestScore", _savableData);
+            _dataService.Save(nameof(BestScore), _savableData);
         }
            
         private void RestoreData()
         {
-            _savableData = _dataService.Load<SavableData>("BestScore");
+            _savableData = _dataService.Load<SavableData>(nameof(BestScore));
             _savableData ??= new SavableData();
         }           
 
